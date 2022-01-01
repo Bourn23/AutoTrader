@@ -580,11 +580,14 @@ def find_swings(data, data_type='ohlc', n = 2):
     last_high = rolling_signal_list(high_list)
     last_high[0:n] = list(high_data[0:n])   # Fill start of data
     
+
+    if data_type == 'ohlc': index  = data.index
+    else:                   index  = range(len(data))
     swing_df = pd.DataFrame(data={'Highs': last_high, 
                                   'Lows' : last_low,
                                   'Last' : last_swing,
                                   'Trend': trend},
-                            index = data.index)
+                            index = index)
     
     return swing_df
     
@@ -772,7 +775,7 @@ def unroll_signal_list(signals):
     ''' Unrolls a signal list. '''
     new_list = np.zeros(len(signals))
     
-    for i in range(len(signals)):
+    for i in range(1, len(signals)):
         if signals[i] != signals[i-1]:
             new_list[i] = signals[i]
     
@@ -1000,4 +1003,5 @@ def last_level_touched(data, grid):
         levels_touched.append(last_level_crossed)
     
     return levels_touched
+
 
